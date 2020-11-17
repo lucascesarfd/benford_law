@@ -6,9 +6,10 @@ Year: 2020
 """
 import tkinter
 from dataclasses import dataclass
+from tkinter import BOTH
 
-navyBlue='#030f30'
-lightBlue='#a6ffdd'
+navy_blue='#030f30'
+light_blue='#a6ffdd'
 
 
 @dataclass
@@ -23,28 +24,24 @@ def calculateWdnSize(window,screen):
 
 def guiWindow(wdn):
     # Define root window
-    mainWindow = generalSizes()
-    mainScreen = generalSizes()
+    main_window = generalSizes()
+    main_screen = generalSizes()
 
     # Calculate the center of the screen
-    mainScreen.width = wdn.winfo_screenwidth()
-    mainScreen.height = wdn.winfo_screenheight()
+    main_screen.width = wdn.winfo_screenwidth()
+    main_screen.height = wdn.winfo_screenheight()
 
-    calculateWdnSize(mainWindow,mainScreen)
+    calculateWdnSize(main_window,main_screen)
 
-    xCordinate = int((mainScreen.width/2) - (mainWindow.width/2))
-    yCordinate = int((mainScreen.height/2) - (mainWindow.height/2))
+    x_cordinate = int((main_screen.width/2) - (main_window.width/2))
+    y_cordinate = int((main_screen.height/2) - (main_window.height/2))
 
     # Define the eindows properties
     wdn.title('Benford\'s Law')
     wdn.iconbitmap('Math.ico')
     wdn.resizable(True,True)
-    wdn.config(bg=lightBlue)
-    wdn.geometry("{}x{}+{}+{}".format(mainWindow.width, mainWindow.height, xCordinate, yCordinate))
-
-    # Insert a Label with the title
-    titleLabel = tkinter.Label(wdn, text="Benford\'s Law", fg=navyBlue, bg=lightBlue,font=('Arial',18,'bold'))
-    titleLabel.pack(pady=(0,20))
+    wdn.config(bg=navy_blue)
+    wdn.geometry("{}x{}+{}+{}".format(main_window.width, main_window.height, x_cordinate, y_cordinate))
 
 def benfordLogic(wdn):
     occurrence_values = {
@@ -62,9 +59,7 @@ def benfordLogic(wdn):
     file_name = "dados2019.csv"
     file_total_lines = 0
 
-    file_name_label = tkinter.Label(wdn, text = "File Name: "+file_name, fg = navyBlue, bg = lightBlue, font = ('Arial', 12, 'bold'))
-    file_name_label.pack(pady=(0,10))
-
+    wdn.config(text = "File Name: "+file_name)
 
     file = open(file_name, 'r')
 
@@ -94,7 +89,7 @@ def benfordLogic(wdn):
 
     for key, value in occurrence_values.items():
         percentage = (value/file_total_lines)*100
-        value_label = tkinter.Label(wdn, text=key.capitalize() + ": " + str(round(percentage,2)) + "%",fg=navyBlue, bg=lightBlue)
+        value_label = tkinter.Label(wdn, text=key.capitalize() + ": " + str(round(percentage,2)) + "%",fg=light_blue, bg=navy_blue)
         value_label.pack()
 
 
@@ -102,9 +97,21 @@ def benfordLogic(wdn):
 The Main Code starts here!
 """
 root = tkinter.Tk()
-
 guiWindow(root)
-benfordLogic(root)
+
+titles_frame = tkinter.Frame(root, bg=navy_blue)
+titles_frame.pack(fill=BOTH,expand=True)
+
+results_frame = tkinter.LabelFrame(root, bg=navy_blue)
+results_frame.pack(fill=BOTH, expand=True, padx=10, pady=10)
+
+# Insert a Label with the title
+title_label = tkinter.Label(titles_frame, text="Benford\'s Law", fg=light_blue, bg=navy_blue,font=('Arial',18,'bold'))
+title_label.pack(pady=(5,20))
+
+benfordLogic(results_frame)
+
+title_label.pack()
 
 # Start the GUI loop
 root.mainloop()
